@@ -1,4 +1,4 @@
-// 严格模式  
+// 严格模式  es5 引入, 
 'use strict';
 function getThis1() {
   return this;

@@ -23,13 +23,13 @@
 ### 数字字面量
 
 ```js
-console.log(010); //8
-console.log(018); //18
+console.log(010);  //8
+console.log(018);  //18
 console.log(0o10); //8
 console.log(0x10); //16
 console.log(0b10); //2    es6
-console.log(1e2); //100
-console.log(.1); //0.1
+console.log(1e2);  //100
+console.log(.1);   //0.1
 console.log(123n); //123  无精度限制的整数类型 BigInt es2010
 
 console.log(parseInt('010')); //10    //es3  8
@@ -83,7 +83,7 @@ let obj = {
 ---
 
 ### `Number`
-普通数据转换规则 
+转换规则 
 ```js
 console.table([ null, undefined, true, false, '', '010', '0x10', '0o10', '0b10', '1e2'].map( v =>{
     return[`${v}`, Number(v)];
@@ -114,9 +114,15 @@ console.log(+obj);
 ---
 
 ```js
+// 加号运算符, 优先转自符串 优先;
 console.log(1 + '1')  // '11'
 console.log('1' + 1)  // '11'
 console.log(1 + '1' - 1); // 10
+console.log(1 + null)  //1
+console.log(1 + undefined)  //NaN
+console.log(1 + true)  //2
+console.log({} + null)  //[object Object]null
+console.log({valueOf:()=>1} + null)  //1
 
 let a = '10.1';
 a = Number(a)
@@ -365,17 +371,6 @@ fn(1, 2, 3, 4, 5);
 3. ES5 引入了 bind 方法来设置函数的 this 值，而不用考虑函数如何被调用的。
 4. ES2015 引入了箭头函数，箭头函数不提供自身的 this 绑定（this 的值将保持为闭合词法上下文的值）。
 
-```js
-'use strict';
-function getThis() {
-  return this;
-}
-console.log(this);
-console.log(getThis());
-```
-
-Note: "test/this.js"
-
 > [Javascript 严格模式详解](http://www.ruanyifeng.com/blog/2013/01/javascript_strict_mode.html)
 
 ===
@@ -383,7 +378,9 @@ Note: "test/this.js"
 ## <!-- .element: style="font-size:1.5em;" -->回调函数, 异步函数 与 `Promise`
 
 1.  函数的参数可以是函数
-2.  函数的返回值也可以是函数 --
+2.  函数的返回值也可以是函数 
+
+---
 
 ```js
 // 函数的参数可以是函数
