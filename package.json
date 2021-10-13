@@ -15,6 +15,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "http-server": "^13.0.2"
+    "easy-promise": "^0.1.0",
+    "http-server": "^13.0.2",
+    "q": "^1.5.1"
   }
 }

@@ -6,13 +6,14 @@ class A {
     }
     init(props) {
         console.log('init', props);
-        Object.assign(this.props,props);
+        Object.assign(this.props, props);
     }
     show(){
         console.log(this.props);
     }
 }
 
+// 类装饰器
 @addAttr({b:2})
 class AA extends A {
     constructor(props){
@@ -26,11 +27,12 @@ class AA extends A {
     }
 }
 
-function addAttr(obj): Function{
-    return function (target) {
+function addAttr(baseProps): Function{
+    return function (target) { // 
         return class extends target{
             constructor(props){
-                super({...obj,...props});
+                Object.assign(props, baseProps)
+                super(props);
             }
         }
     };
@@ -40,3 +42,4 @@ console.log('111')
 let a = new AA({a:1})
 a.showA()
 a.showB()
+console.log(a instanceof AA)

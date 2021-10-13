@@ -113,6 +113,7 @@ console.log(+obj);
 ```
 ---
 
+> 在执行计算操作时，会先尝试将非Number数据转为Number;  
 ```js
 // 加号运算符, 优先转自符串 优先;
 console.log(1 + '1')  // '11'
@@ -124,16 +125,16 @@ console.log(1 + true)  //2
 console.log({} + null)  //[object Object]null
 console.log({valueOf:()=>1} + null)  //1
 
+// 其他关于Number
 let a = '10.1';
 a = Number(a)
 a = +a; // 可以用 '一元加运算符' 替代 Number();
-a -= 0; // 利用减号操作符 触发转换; 
+a = a - 0; // 利用减号操作符 触发转换; 
+
 a = ~~a; // 取整
 a = a >> 0; // 取整
-console.log(a);
 
 ```
-> 在执行计算操作时，会先尝试将非Number数据转为Number;  
 > JavaScript 将数字存储为 `Float64` , 但所有按位运算都以 `Int32` 执行。
 
 ---
@@ -148,13 +149,18 @@ console.log(!!{}); // true
 console.log(!![]); // true
 console.log(0 || 5); // ?
 
-if (a) {
-    /*code*/
-}
+if (a) {}
+if (Boolean(a)) {}
+if (!!a) {}
 
-if (~x.indexOf(v)) {
-  /*未找到*/
-} // ~-1 === 0  | ~0 === -1
+
+if (~arr.indexOf(item)) {
+  /*在arr检索到item*/
+} 
+
+var i;
+console.log(i=[1,2,3].indexOf(1), ~i, !!~i);  // ~-1 === 0 
+console.log(i=[1,2,3].indexOf(9), ~i, !!~i);  // ~0 === -1
 
 if (a !== a) {
   /*code*/
@@ -167,7 +173,7 @@ if (a !== a) {
 
 ### 非严格比较符 **==**
 ```js
-console.log(!![]);
+console.log(!![]); // true
 console.log(null == undefined);
 console.log(null == NaN);
 console.log('' == 0);
@@ -402,7 +408,7 @@ var show = getShowFn('a');
 show(); // a
 ```
 
-===
+---
 
 ### 回调函数
 
@@ -410,19 +416,21 @@ show(); // a
 
 ```js
 function getData(id, callback) {
-  console.log(111);
+  console.log('run getData');
   if (!id) return callback(new TypeError('没有id'));
   setTimeout(() => {
     callback(null, [1, 2, 3, 4]);
   }, 1000);
 }
-getData('123', function (err, data) {
-  console.log('callback', data);
+let data;
+getData('id', function (err, _data) {
+  data = _data
+  console.log('2', data);
 });
-console.log(333);
+console.log('1',data);
 ```
 
-===
+---
 
 ### 异步函数 与 Promise
 
@@ -430,59 +438,46 @@ console.log(333);
 
 - `Promise` 有三种状态：`pending`（进行中）、`fulfilled`（已成功）和 `rejected`（已失败），状态不可逆
 - `Promise` 可以混用 (原生`Promise`和大多数第三方实现都符合`Promise/A+`标准)
-- 习惯用
+- 异步函数是基于`Promise`实现的
 
-### Promise
+---
+
+### 生成器函数, ts 装饰器
 
 ```js
-// promise
-// new Promise(function(resolve:Function, reject:Function){})
-function getData(id) {
-	return new Promise(function(resolve, reject){
-		if(!id) return reject(new TypeError('没有id'))
-		setTimeout(()=>{
-			resolve([1,2,3,4]) //
-		},500)
-	})
+function* anotherGenerator(i) {
+  console.log(`run anotherGenerator`)
+  let arg1 = yield (i + 1);
+  yield i + 2 + (arg1 ?? 0);
 }
 
-// promise.then(onFulfilled:Function, onRejected:Function)
-let pData = getData('123').then(
-	(data)=>{
-		console.log('callback', data)
-		return data.join(',')
-	},(err)=>{
-		console.error(err)
-		throw err;
-	}
-)
+// 1.生成器函数的返回值 是一个生成器对像
+var gen1 = anotherGenerator(1);
+console.log(gen1);
+console.log('1:', gen1.next()) //2
+console.log('2:', gen1.next(10)) //13
+console.log('3:', gen1.next())
 
-pData.then((data)=>{
-	return console.log(data)
-}).catch((err)=>{
-	console.log('操作失败！')
-})
-
-// async
-async function main() {
-	let data
-	try {
-		data = await getData(1)
-
-	}
+function* generator(i){
+  yield i;
+  yield* anotherGenerator(i);// 移交执行权
+  yield i + 10;
 }
 
+var gen2 = generator(10);
+
+console.log(gen2.next().value); // 10
+console.log(gen2.next().value); // 10
+console.log(gen2.next().value); // 10
+console.log(gen2.next().value); // 10
+console.log(gen2.next().value); // 10
 ```
+
 
 ## 前端基础学习网站推荐
 
 - [https://www.w3school.com.cn/](https://www.w3school.com.cn/)
 - [https://wangdoc.com/](https://wangdoc.com/)
+- [ECMAScript 6 入门](https://es6.ruanyifeng.com/)
+- [运算符优先级] (https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#table)
 
-// 数据驱动； // 事件驱动; //
-
-// () => {}; ...解构运算符 ， `${}` ,setTimeout, callback, new Promise, Promise.all, async function(){}
-
-bom , dom;
-
-~ indexOf() !! var a = abc || ''; abc && fun(); abc || fun(); 5>>1;
