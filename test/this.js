@@ -24,6 +24,7 @@ let getThis = obj.getThis;
 console.log(obj === obj.getThis()); // true
 console.log(obj === getThis()); // false
 
+
 console.log('--call apply--');
 // call(target,arg1,arg2), apply(target,[arg1,arg2]) 指定 this 执行函数
 console.log(obj === getThis.call(obj, 'a', 'b')); // true
@@ -32,19 +33,21 @@ console.log(obj === getThis.apply(obj, ['a', 'b'])); // true
 // <Item onChange={this.onChange.bind(this)} />
 console.log('--bind--');
 // bind(target,arg1,arg2):function 生成一个 绑定this等参数的新函数
-getThis = getThis.bind(obj, 'a');
-console.log(obj === getThis()); // true
+let getThis1 = getThis.bind(obj, 'a');
+console.log(obj === getThis1()); // true
 
 console.log('--()=>{}--');
+let obj = {};
 let getThis2;
 let _this;
+
 function setGetThis2() {
   _this = this;
   getThis2 = () => this;
 }
+
 setGetThis2();
 console.log(global === getThis2()); // true
-console.log(undefined === getThis2()); // true
 setGetThis2.call(obj);
 console.log(obj === getThis2()); // true
 // call, bind 不会改变箭头函数的 this 指向

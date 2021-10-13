@@ -472,7 +472,7 @@ console.log(gen2.next().value); // 10
 console.log(gen2.next().value); // 10
 console.log(gen2.next().value); // 10
 ```
-
+===
 
 ## 前端基础学习网站推荐
 
